@@ -1,7 +1,9 @@
 
 
 .box-shadow {
-    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2); */
+    /* box-shadow: 10px 11px 14px -8px rgba(0,0,0,0.56); */
+    box-shadow: 5px 32px 58px -8px rgba(89,89,89,0.56);
 }
 
 #form-checkout {
@@ -18,7 +20,29 @@
     padding: 1px 2px;
   }
 
+  .dataTables_wrapper .rdt_TableCell{
+    font-size:10px;
+  }
+
 /* .map-container {
     height: 400px;
     } */
+
+    .fab-hiddenDex {
+      display: none !important;
+    }
+    
+    .fab-mobileDexUp {
+      position: fixed !important;
+      bottom: 16px;
+      right: 16px;
+      display: flex !important;
+    } 
+    
+    .fab-mobileDexDown {
+      position: fixed !important;
+      bottom: 66px;
+      right: 16px;
+      display: flex !important;
+    } 
 

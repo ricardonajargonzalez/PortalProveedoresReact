@@ -1,30 +1,89 @@
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useFormAction, useNavigate } from "react-router-dom";
 import { Google } from "@mui/icons-material";
-import { Button, Link, Grid, TextField, Typography } from "@mui/material";
+import { Button, Link, Grid, TextField, Typography, CircularProgress, Box, Alert } from "@mui/material";
 import { AuthLayout } from "../layout/AuthLayout";
+import { useForm } from "../../hooks";
+import { checkingAuthentication } from "../../store/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useMemo, useState } from "react";
+import logo from '../../assets/img/dex-logo.png'
+
 
 
 
 
 export const LoginPage = () => {
+
+  const dispatch = useDispatch();
+  const { status, isLoading, errorMessage } = useSelector(state => state.auth);
+  const isErrorMessage  = useMemo( () => errorMessage != null, [errorMessage] );
+
+  const { email, password, onInputChange } = useForm({
+    email: '',
+    password: ''
+  });
+
+  const [animatedError, setanimatedError] = useState('');
+
+  useEffect(() => {
+    if(isErrorMessage){
+      setanimatedError('animate__animated animate__shakeX')
+    } 
+
+  }, [isErrorMessage]);
+  
+
+  const isAuthenticating = useMemo(() => status === 'cheking', [status]);
+  const isAuthenticated = useMemo(() => status === 'authenticated', [status]);
+  const navigate = useNavigate();
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    dispatch(checkingAuthentication(email, password));
+    // navigate('/dashboard', {replace: true});
+  }
+
+  const onGoogleSignIn = (event) => {
+    console.log({ email, password });
+  }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard', { replace: true })
+    }
+  }, [isAuthenticated]);
+
+
+
   return (
-    <AuthLayout title="Portal de Consulta de Proveedores">
-      <form
-      //onSubmit={ onSubmit }
+    <AuthLayout 
+    title="PORTAL DE CLIENTES">
+        
+      <form onSubmit={onSubmit}
       >
         <Grid container>
-          <Grid item>
-             <img  src="./nissanlogo.png" />
+          <Grid item xs={12} md={12}>
+             <Box
+             display="flex"
+             justifyContent="center"
+             alignItems="center"
+             minHeight="30px"
+             >
+                  <img style={{width: '130px'}} src={`${import.meta.env.VITE_URL_BASE}${logo}`} />
+            </Box>
           </Grid>
+          {/* <Grid item>
+          <Typography>Portal de Consulta de Proveedores</Typography>
+          </Grid> */}
           <Grid item xs={12} sx={{ mt: 2 }}>
             <TextField
-              label="Correo electronico"
-              type="email"
-              placeholder="Ingresa tu correo"
+              label="Usuario"
+              type="text"
+              placeholder="Ingresa usuario"
               fullWidth
               name="email"
-            // value={ email }
-            // onChange={  onInputChange }
+              value={email}
+              onChange={onInputChange}
             />
           </Grid>
 
@@ -35,32 +94,38 @@ export const LoginPage = () => {
               placeholder="Ingresa tu contraseña"
               fullWidth
               name="password"
-            // value={ password }
-            // onChange={  onInputChange }
+              value={password}
+              onChange={onInputChange}
             />
           </Grid>
 
           <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
-            <Grid item xs={12} sm={6} >
-              <Button type="submit" variant="contained" fullWidth >
-                Enter
+            <Grid item xs={12} sm={12} >
+              <Button 
+                style={{ color: 'white', backgroundColor: '#004479' }}
+                disabled={isAuthenticating}
+                type="submit" variant="contained" fullWidth >
+                { isLoading ? <CircularProgress sx={{color: '#004479'}} size={25} /> : <>INICIAR SESIÓN</> } 
               </Button>
             </Grid>
-            <Grid item xs={12} sm={6} >
+            {/* <Grid item xs={12} sm={6} >
               <Button
-                // onClick={ onGoogleSignIn }
+              disabled={true}
+                // disabled={isAuthenticating}
+                onClick={onGoogleSignIn}
                 variant="contained" fullWidth sx={{ pl: 2, pr: 2, backgroundColor: 'color1.main' }}>
                 <Google />
                 <Typography sx={{ ml: 1 }}>Google</Typography>
               </Button>
+            </Grid> */}
+           {
+           errorMessage &&
+           <Grid item xs={12}>
+               <Alert className={animatedError} severity="error">{errorMessage}</Alert>
             </Grid>
+           } 
           </Grid>
 
-          <Grid container direction="row" justifyContent="end">
-            <Link component={RouterLink} color="primary.main" to="/auth/register">
-              Crear cuenta
-            </Link>
-          </Grid>
 
         </Grid>
       </form>

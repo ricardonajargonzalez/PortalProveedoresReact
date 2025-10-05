@@ -1,10 +1,28 @@
 import { Grid, Typography } from "@mui/material"
+import { useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 
 
 
 export const AuthLayout = ({ children, title = '' }) => {
+
+  const [animatedcontainer, setanimatedcontainer] = useState('animate__animated animate__bounceInRight');
+  const {errorMessage} =  useSelector(state => state.auth);
+  const isErrorMessage  = useMemo( () => errorMessage != null, [errorMessage] );
+
+
+
+    useEffect(() => {
+      if(isErrorMessage){
+        setanimatedcontainer('');
+      } 
+    }, [isErrorMessage]);
+
+
+
+
   return (
-    <Grid
+    <Grid className={animatedcontainer}
     container
     spacing={ 0 }
     direction="column"
@@ -12,7 +30,7 @@ export const AuthLayout = ({ children, title = '' }) => {
     justifyContent="center"
     sx={{ minHeight: '100vh', backgroundColor: 'background.main', padding: 4 }}
     >
-     
+
       <Grid 
       item
       className="box-shadow"
@@ -24,7 +42,10 @@ export const AuthLayout = ({ children, title = '' }) => {
         borderRadius: 2 
         }}
       >
-        <Typography variant="h5" sx={{ mb: 1}}>{ title }</Typography>
+        {/* {classAnimated} */}
+        <center>
+          <Typography  variant="h6" sx={{ mb: 1}}>{ title }</Typography>
+        </center>
          
          {/* children */}
          { children }

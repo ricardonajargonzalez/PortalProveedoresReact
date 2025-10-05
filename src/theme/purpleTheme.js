@@ -19,15 +19,16 @@ export const purpleTheme = createTheme({
 export const grayTheme = createTheme({
     
     palette : {
+      
         primary : {
             main: '#009ee3' //colors azul
         },
         background: {
             main: 'rgba(145, 158, 171, 0.12)' //gris para background
         },
-        error : { 
-            main: 'rgb(245, 245, 245)'
-        },
+        // error : { 
+        //     main: 'rgb(245, 245, 245)'
+        // },
         color1:{
             main: '#009ee3'
         },
@@ -36,6 +37,12 @@ export const grayTheme = createTheme({
         },
         graye: {
           main: 'rgb(245, 245, 245)'
+        },
+        red: {
+          main: '#d32f2f'
+        },
+        rednissan: {
+          main: 'rgba(253, 0, 53, .8)'
         }
     },
      components: {
@@ -67,6 +74,7 @@ export const grayTheme = createTheme({
         },
       },
     },
+    
   },
 });
 
